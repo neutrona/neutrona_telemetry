@@ -1,0 +1,5 @@
+# In order to create the database, issue the following on your server from the installation directory
+
+sudo docker exec -it influxdb /bin/bash
+influx
+create database accedian_telemetry

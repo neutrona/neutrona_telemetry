@@ -1,0 +1,39 @@
+---
+
+version: '2'
+services:
+  influxdb:
+    image: influxdb:latest
+    volumes:
+      - "./influxdb:/var/lib/influxdb"
+    restart: always
+    ports:
+      - "8086:8086"
+    container_name: influxdb
+   
+  influxdb_cli:
+    image: influxdb:latest
+    container_name: influxdb_cli
+    depends_on:
+      - influxdb
+    links:
+      - influxdb:influxdb
+    command: sleep 10 && influx -host influxdb -execute "create database neutrona_telemetry"
+    
+      
+  logstash_telemetry:
+    build: ./logstash_telemetry
+    extra_hosts:
+      - "telemetry.neutrona.com:34.231.189.206"
+    container_name: logstash_telemetry
+    links:
+      - influxdb:influxdb
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    container_name: grafana
+    links:
+      - influxdb:influxdb
