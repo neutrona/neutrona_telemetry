@@ -90,14 +90,16 @@ _All parameters are case sensitive._
 
 - Please make sure you can reach the telemetry broker.
 - Please check that the file `logstash_telemetry/logstash.conf` was modified as instructed and is syntactically correct.
-- Grafana: Please check that the data source has been configured correctly under _"Grafana Menu -> Data Sources"_
-- In case that there is an error showing "Could not find the specified database name" enter in your console:
+- Grafana: 
+    - Please check that the data source has been configured correctly under _"Grafana Menu -> Data Sources"_
+    - If you encounter the _"Could not find the specified database name"_ error while adding the data source execute the following commands from the Docker host CLI:
+    
 	```
 	$ sudo docker exec -it influxdb bash
-	$ influx
+	# influx
 	> create database neutrona_telemetry
 	> quit
-	$ exit
+	# exit
 	```
 	
 ## To rebuild the app:
