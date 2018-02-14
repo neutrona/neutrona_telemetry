@@ -37,7 +37,7 @@ $ cd neutrona_telemetry
 
 For example: 
 ```
-  $ nano logstash_telemetry/logstash
+  $ nano logstash_telemetry/logstash.conf
 ```
 
 ```shell
