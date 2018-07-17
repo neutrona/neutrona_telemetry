@@ -14,7 +14,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "5.1.3"
+      "version": "5.2.1"
     },
     {
       "type": "panel",
@@ -52,7 +52,7 @@
   "gnetId": null,
   "graphTooltip": 2,
   "id": null,
-  "iteration": 1528730047892,
+  "iteration": 1531832450685,
   "links": [],
   "panels": [
     {
@@ -229,7 +229,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 7
+        "y": 14
       },
       "id": 1,
       "legend": {
@@ -356,7 +356,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 28
       },
       "id": 3,
       "legend": {
@@ -475,7 +475,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 42
       },
       "id": 4,
       "links": [],
@@ -510,6 +510,7 @@
       ],
       "targets": [
         {
+          "alias": "Message",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -520,28 +521,66 @@
             },
             {
               "params": [
-                "null"
+                "none"
               ],
               "type": "fill"
             }
           ],
+          "measurement": "/^$measurements$/",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT \"Message\", \"System Uptime\", \"System MAC Address\" FROM \"$measurement\" WHERE $timeFilter",
-          "rawQuery": true,
+          "query": "SELECT last(\"Message\"), last(\"System Uptime\") FROM /^$measurements$/ WHERE $timeFilter GROUP BY time($__interval) fill(none)",
+          "rawQuery": false,
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
             [
               {
                 "params": [
-                  "value"
+                  "Message"
                 ],
                 "type": "field"
               },
               {
                 "params": [],
-                "type": "mean"
+                "type": "last"
+              }
+            ]
+          ],
+          "tags": []
+        },
+        {
+          "alias": "System Uptime",
+          "groupBy": [
+            {
+              "params": [
+                "$__interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "none"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "/^$measurements$/",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "refId": "B",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "System Uptime"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "last"
               }
             ]
           ],
@@ -563,7 +602,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 49
       },
       "id": 6,
       "legend": {
@@ -703,8 +742,8 @@
     ]
   },
   "time": {
-    "from": "now-1h",
-    "to": "now"
+    "from": "now/M",
+    "to": "now/M"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -734,5 +773,5 @@
   "timezone": "utc",
   "title": "Neutrona Performance Telemetry",
   "uid": "ogBW5_Smk",
-  "version": 4
+  "version": 2
 }
